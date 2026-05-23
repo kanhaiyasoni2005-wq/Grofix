@@ -1,0 +1,21 @@
+// ElevatedButton(
+//   onPressed: () async {
+//     User? user = await signInWithGoogle();
+//     if (user != null) {
+//       // Success → Home screen pe navigate kar do
+//       Navigator.pushReplacementNamed(context, '/home');
+//     } else {
+//       // Error show karo
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text("Sign in failed!")),
+//       );
+//     }
+//   },
+//   child: Text("Sign in with Google"),
+// )
+
+// '''
+// sign out ke liye - 
+// await GoogleSignIn().signOut();
+// await FirebaseAuth.instance.signOut();
+// '''

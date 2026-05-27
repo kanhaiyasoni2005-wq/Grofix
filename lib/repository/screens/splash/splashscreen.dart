@@ -121,7 +121,7 @@ class _splashScreen extends State<splashScreen> {
 
                   // 🔥 STYLISH grofix TEXT
                   Text(
-                    "grofix",
+                    "GROFIX",
                     style: TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.bold,

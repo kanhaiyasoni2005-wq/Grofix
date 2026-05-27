@@ -19,22 +19,13 @@ class productReview extends StatefulWidget{
 
 // var a = productOverView(product: product)
 class _productReviewState extends State<productReview> {
-  Position? currentPosition;
- @override
-void initState() {
-  super.initState();
-
-  Future.microtask(() async {
-    var of = Provider.of<Viewmodel>(context, listen: false);
-    of.fatchAdress();
-
-    try {
-      currentPosition = await getLocation();
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  });
-}
+ 
+@override void initState() { 
+  // TODO: implement initState 
+  super.initState(); 
+  Future.microtask((){ 
+    Provider.of<Viewmodel>(context, listen: false).fatchAdress();
+     }); }
 
   
 Future<Position> getLocation() async {
@@ -362,17 +353,35 @@ body:Stack(
               ),
             ),
             onPressed: isPlacingOrder ? null : () async {
-    
-      setState(() {
-        isPlacingOrder = true;
-      });
-    
-      try {
-        double lat = currentPosition?.latitude ?? 0.0;
-double lng = currentPosition?.longitude ?? 0.0;
-    
-        var vm = Provider.of<Viewmodel>(context, listen: false);
-        var cart = context.read<Cartprovider>();
+
+  setState(() {
+    isPlacingOrder = true;
+  });
+
+  try {
+
+    // 🔥 YAHAN LOCATION LO
+    var vm = Provider.of<Viewmodel>(context, listen: false);
+var cart = context.read<Cartprovider>();
+
+if (vm.selectedAddress == null) {
+
+  setState(() {
+    isPlacingOrder = false;
+  });
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text("Please select address"))
+  );
+
+  return;
+}
+
+// 🔥 AB LOCATION LO
+Position pos = await getLocation();
+
+double lat = pos.latitude;
+double lng = pos.longitude;
     
        if (vm.selectedAddress == null) {
 
@@ -424,6 +433,15 @@ double lng = currentPosition?.longitude ?? 0.0;
 
   String cashfreeOrderId = data["order_id"] ?? "";
   String sessionId = data["payment_session_id"] ?? "";
+
+  if (cashfreeOrderId.isEmpty || sessionId.isEmpty) {
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text("Unable to start payment"))
+  );
+
+  return;
+}
 
   // 🔥 PAYMENT PAGE OPEN FAST
   await PaymentService.startPayment(

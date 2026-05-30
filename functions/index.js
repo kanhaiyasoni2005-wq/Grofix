@@ -19,7 +19,10 @@ exports.createOrder = functions.https.onRequest({ invoker: "public" }, async (re
      console.log("🔥 NEW CODE RUNNING");
     // 🔥 FIX: body safely read karo
     const body = req.body || JSON.parse(req.rawBody || "{}");
-    const amount = body.amount;
+   const amount = body.amount;
+const customerName = body.customer_name;
+const customerEmail = body.customer_email;
+const customerPhone = body.customer_phone;
 
     console.log("Amount:", amount);
     const orderId = "order_" + Date.now();
@@ -30,10 +33,12 @@ exports.createOrder = functions.https.onRequest({ invoker: "public" }, async (re
         order_id: orderId,
         order_amount: amount,
         order_currency: "INR",
-        customer_details: {
-          customer_id: "user123",
-          customer_phone: "9999999999"
-        }
+       customer_details: {
+  customer_id: customerPhone,
+  customer_name: customerName,
+  customer_email: customerEmail,
+  customer_phone: customerPhone
+}
       },
       {
         headers: {

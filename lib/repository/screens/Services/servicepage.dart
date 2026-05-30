@@ -354,10 +354,10 @@ Align(
     onPressed: () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => Document_detail()),
+        MaterialPageRoute(builder: (_) => DocumentDetail()),
       );
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Help clicked")),
+        SnackBar(content: Text("Please wait..")),
       );
     },
     child: Text("Document details?"),

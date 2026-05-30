@@ -33,8 +33,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Grofix',
       theme: ThemeData(
+        scaffoldBackgroundColor: Color(0xffEEF7FF),
      
-        colorScheme: .fromSeed(seedColor: const Color.fromARGB(255, 160, 183, 58)),
+    
+        colorScheme: .fromSeed(seedColor: const Color.fromARGB(255, 2, 88, 187)),
       ),
       home: 
       

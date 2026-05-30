@@ -1,37 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-class Document_detail extends StatefulWidget {
-  const Document_detail({super.key});
+class DocumentDetail extends StatefulWidget {
+  const DocumentDetail({super.key});
 
   @override
-  State<Document_detail> createState() => _Document_detailState();
+  State<DocumentDetail> createState() => _DocumentDetailState();
 }
 
-class _Document_detailState extends State<Document_detail> {
-  late final WebViewController controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(
-        Uri.parse("https://sites.google.com/view/grofix/documents"),
-      );
-  }
+class _DocumentDetailState extends State<DocumentDetail> {
+  InAppWebViewController? webViewController;
+  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
-        title: Text("Document Details")
+        title: const Text("Document Details"),
       ),
-      body: WebViewWidget(controller: controller),
+      body: Stack(
+        children: [
+          InAppWebView(
+            initialUrlRequest: URLRequest(
+              url: WebUri(
+                "https://sites.google.com/view/grofix/documents",
+              ),
+            ),
+            initialSettings: InAppWebViewSettings(
+              javaScriptEnabled: true,
+              useShouldOverrideUrlLoading: true,
+              mediaPlaybackRequiresUserGesture: false,
+              supportZoom: true,
+              useHybridComposition: true,
+            ),
+            onWebViewCreated: (controller) {
+              webViewController = controller;
+            },
+            shouldOverrideUrlLoading:
+                (controller, navigationAction) async {
+              return NavigationActionPolicy.ALLOW;
+            },
+            onLoadStop: (controller, url) {
+              setState(() {
+                isLoading = false;
+              });
+            },
+            onReceivedError: (controller, request, error) {
+              debugPrint("WebView Error: ${error.description}");
+            },
+          ),
+
+          if (isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
+      ),
     );
   }
 }
-
-

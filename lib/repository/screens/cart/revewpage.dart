@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grofix/data/ViewModel.dart';
 import 'package:grofix/provider/cartProvider.dart';
@@ -19,12 +20,14 @@ class productReview extends StatefulWidget{
 
 // var a = productOverView(product: product)
 class _productReviewState extends State<productReview> {
+  User? user = FirebaseAuth.instance.currentUser;
  
 @override void initState() { 
   // TODO: implement initState 
   super.initState(); 
   Future.microtask((){ 
     Provider.of<Viewmodel>(context, listen: false).fatchAdress();
+    
      }); }
 
   
@@ -52,6 +55,7 @@ Future<Position> getLocation() async {
   );
 }
   String selectedPayment = "cod";
+   
 
   bool isPlacingOrder = false;
   @override
@@ -429,7 +433,12 @@ double lng = pos.longitude;
   var cartItemsCopy = List.from(cart.cartList);
 
   // 🔥 FIRST CREATE CASHFREE ORDER
-  var data = await PaymentService.createOrder(cart.totalPrice);
+  var data = await PaymentService.createOrder(
+  amount: cart.totalPrice,
+  name: vm.selectedAddress?["name"]?.toString() ?? "",
+  email: user?.email ?? "",
+  phone: vm.selectedAddress?["phone"]?.toString() ?? "",
+);
 
   String cashfreeOrderId = data["order_id"] ?? "";
   String sessionId = data["payment_session_id"] ?? "";

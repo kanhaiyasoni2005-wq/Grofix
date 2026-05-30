@@ -11,7 +11,12 @@ import 'package:http/http.dart' as http;
 class PaymentService {
 
   // 🔥 CREATE ORDER
-  static Future<Map<String, dynamic>> createOrder(double amount) async {
+ static Future<Map<String, dynamic>> createOrder({
+  required double amount,
+  required String name,
+  required String email,
+  required String phone,
+}) async {
 
     try {
 
@@ -21,8 +26,11 @@ class PaymentService {
           "Content-Type": "application/json",
         },
         body: jsonEncode({
-          "amount": amount,
-        }),
+  "amount": amount,
+  "customer_name": name,
+  "customer_email": email,
+  "customer_phone": phone,
+}),
       );
 
       print("STATUS CODE: ${response.statusCode}");

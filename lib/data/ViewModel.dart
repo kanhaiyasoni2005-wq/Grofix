@@ -55,27 +55,37 @@ class Viewmodel extends ChangeNotifier {
     });
   }
 
-  Future<void> addAddress({
-    required String name,
-    required String phone,
-    required String address,
-  }) async {
-    final currentUserId = userId;
-    if (currentUserId == null) {
-      throw Exception("User is not logged in");
-    }
+ Future<void> addAddress({
+  required String name,
+  required String phone,
+  required String email,
+  required String address,
+}) async {
 
-    await _fb.collection("users").doc(currentUserId).collection("Address").add({
-      "name": name,
-      "phone": phone,
-      "Address": address,
-    });
+  final currentUserId = userId;
+
+  if (currentUserId == null) {
+    throw Exception("User is not logged in");
   }
 
-  void selectAddress(Map<String, dynamic> address) {
-    selectedAddress = address;
-    notifyListeners();
-  }
+  await _fb
+      .collection("users")
+      .doc(currentUserId)
+      .collection("Address")
+      .add({
+
+    "name": name,
+    "phone": phone,
+    "email": email,
+    "Address": address,
+
+  });
+}
+
+void selectAddress(Map<String, dynamic> address) {
+  selectedAddress = address;
+  notifyListeners();
+}
 
   // 🔥 PLACE ORDER
   Future<String> placeOrder({

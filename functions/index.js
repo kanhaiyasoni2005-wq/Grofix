@@ -1,5 +1,10 @@
 const functions = require("firebase-functions");
+const { onDocumentCreated } = require("firebase-functions/v2/firestore");
+const admin = require("firebase-admin");
+
+admin.initializeApp();
 const axios = require("axios");
+
 
 const APP_ID = "125825905a3840f59fac80c005e9528521";
 const SECRET_KEY = "cfsk_ma_prod_ef3b665aed5f30f600ebbdbb8d1538bb_cf3d7a2f";
@@ -60,3 +65,71 @@ const customerPhone = body.customer_phone;
     });
   }
 });
+
+exports.sendOrderNotification = onDocumentCreated(
+  "orders/{orderId}",
+  async (event) => {
+    try {
+      const db = admin.firestore();
+
+      const adminDoc = await db
+        .collection("admin")
+        .doc("settings")
+        .get();
+
+      if (!adminDoc.exists) {
+        console.log("Admin token not found");
+        return;
+      }
+
+      const token = adminDoc.data().token;
+
+      await admin.messaging().send({
+        token: token,
+        notification: {
+          title: "New Order",
+          body: "A new order has arrived",
+        },
+      });
+
+      console.log("Notification sent successfully");
+    } catch (e) {
+      console.error("Notification Error:", e);
+    }
+  }
+);
+exports.sendBookingNotification = onDocumentCreated(
+  "bookings/{bookingId}",
+  async (event) => {
+    try {
+      const db = admin.firestore();
+
+      const adminDoc = await db
+        .collection("admin")
+        .doc("settings")
+        .get();
+
+      if (!adminDoc.exists) return;
+
+      const token = adminDoc.data().token;
+
+      await admin.messaging().send({
+        token: token,
+        notification: {
+          title: " New Booking",
+          body: "A new booking has arrived",
+        },
+        android: {
+          priority: "high",
+          notification: {
+            sound: "order_sound",
+          },
+        },
+      });
+
+      console.log("Booking notification sent");
+    } catch (e) {
+      console.error("Booking notification error:", e);
+    }
+  }
+);

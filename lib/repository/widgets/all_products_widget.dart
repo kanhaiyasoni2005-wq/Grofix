@@ -45,84 +45,116 @@ class AllProductsGrid extends StatelessWidget {
             }));
           },
 
-            child: Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 5,
-                    color: Colors.grey.shade200,
-                  )
-                ],
-              ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: CachedNetworkImage(
-                      imageUrl: p.image,
-                      fit: BoxFit.cover,
+             child: Container(
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(12),
+    color: Colors.white,
+    boxShadow: [
+      BoxShadow(
+        blurRadius: 4,
+        color: Colors.grey.shade300,
+      )
+    ],
+  ),
+
+  child: Column(
+    children: [
+
+      Expanded(
+        child: ClipRRect(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(12),
+          ),
+          child: CachedNetworkImage(
+            imageUrl: p.image,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            placeholder: (context, url) => SizedBox(),
+            errorWidget: (context, url, error) =>
+                Icon(Icons.broken_image),
+          ),
+        ),
+      ),
+
+      if (p.stock <= 0)
+        Text(
+          "Out of Stock",
+          style: TextStyle(
+            color: Colors.red,
+            fontSize: 12,
+          ),
+        ),
+
+      Padding(
+        padding: const EdgeInsets.all(6),
+        child: Column(
+          children: [
+            Text(
+              p.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+
+            Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "₹${p.price}",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.green,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+
+                Container(
+                  height: 32,
+                  width: 32,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius:
+                        BorderRadius.circular(8),
+                  ),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: p.stock > 0
+                        ? () {
+                            var cartItem = CartModel(
+                              catagory: p.catagory!,
+                              Description:
+                                  p.Description!,
+                              productId: p.id,
+                              name: p.name,
+                              image: p.image,
+                              price: p.price,
+                              quantity: 1,
+                            );
+
+                            var cart =
+                                context.read<Cartprovider>();
+
+                            cart.addItem(cartItem);
+                            cart.showCartPopupTemporarily();
+                          }
+                        : null,
+                    icon: Icon(
+                      Icons.add,
+                      color: p.stock > 0
+                          ? Colors.white
+                          : Colors.green,
+                      size: 18,
                     ),
                   ),
-                  if (p.stock <= 0)
-  Text(
-    "Out of Stock",
-    style: TextStyle(color: Colors.red, fontSize: 12),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ],
   ),
-                  SizedBox(height: 5),
-                  Text(
-                    p.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                   Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-              
-                            Text(
-                              "₹${p.price }",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.green,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-              
-                            Container(
-                              height: 32,
-                              width: 32,
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: IconButton(
-                                padding: EdgeInsets.zero,
-                                onPressed: p.stock > 0
-    ? () {
-        var cartItem = CartModel(
-          catagory: p.catagory!,
-          Description: p.Description!,
-          productId: p.id,
-          name: p.name,
-          image: p.image,
-          price: p.price,
-          quantity: 1,
-        );
-
-        var cart = context.read<Cartprovider>();
-        cart.addItem(cartItem);
-        cart.showCartPopupTemporarily();
-      }
-    : null, // ❌ disable when stock = 0
-                                icon: Icon(Icons.add,color: p.stock > 0 ? Colors.white : Colors.green, size: 18),
-                              ),
-                            ),
-                          ],
-                        ),
-                ],
-              ),
-            )
+)
              );
           },
         ),

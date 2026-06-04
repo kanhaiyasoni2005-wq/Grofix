@@ -51,9 +51,8 @@ class _HomepageState extends State<Homepage> {
     Consumer<Viewmodel>(
   builder: (context, vm, child) {
     if (vm.bannerImages.isEmpty) {
-      return Center(child: CircularProgressIndicator());
-    }
-
+  return SizedBox();
+}
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -81,8 +80,8 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
         ),
-        placeholder: (context, url) =>
-        Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        // placeholder: (context, url) =>
+        // Center(child: CircularProgressIndicator(strokeWidth: 2)),
         errorWidget: (context, url, error) =>
         Icon(Icons.broken_image),
       );

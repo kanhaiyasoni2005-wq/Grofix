@@ -45,7 +45,7 @@ body:
               ),
               child: CachedNetworkImage(
                 imageUrl: product.image,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
                 placeholder: (context, url) =>
                     Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) =>
@@ -125,7 +125,56 @@ body:
                   ],
                 ),
       
-                SizedBox(height: 150), // 🔥 space for button
+                SizedBox(height: 15), // 🔥 space for button
+                                /// 🔥 RETURN & CANCELLATION POLICY
+Container(
+  width: double.infinity,
+  padding: const EdgeInsets.all(12),
+  decoration: BoxDecoration(
+    color: Colors.orange.shade50,
+    borderRadius: BorderRadius.circular(12),
+    border: Border.all(
+      color: Colors.orange.shade200,
+    ),
+  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Row(
+        children: [
+          Icon(
+            Icons.assignment_return,
+            color: Colors.orange,
+          ),
+          SizedBox(width: 8),
+          Text(
+            "Return & Cancellation Policy",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+
+      SizedBox(height: 10),
+
+      Text(
+        "• Product delivery के 4 घंटे के अंदर return किया जा सकता है.\n\n"
+        "• Return पर कुल राशि का 10% charge काटा जाएगा.\n\n"
+        "• Product उसी condition में होना चाहिए जिस condition में deliver किया गया था.\n\n"
+        "• Product में किसी भी प्रकार का damage, use, missing item या difference नहीं होना चाहिए.\n\n"
+        "• Order dispatch होने से पहले कभी भी cancel किया जा सकता है.",
+        style: TextStyle(
+          fontSize: 14,
+          height: 1.5,
+          color: Colors.black87,
+        ),
+      ),
+    ],
+  ),
+),
+SizedBox(height: 150),
               ],
             ),
           ),

@@ -159,22 +159,27 @@ void selectAddress(Map<String, dynamic> address) {
     };
   }).toList();
 
-  var doc = await firestore.collection("orders").add({
+var doc = await firestore.collection("orders").add({
 
-    "userId": userId,
-    "products": products,
-    "totalPrice": totalPrice,
-    "totalItems": cartItems.length,
-    "paymentMethod": paymentMethod,
-    "address": address,
-    "createdAt": FieldValue.serverTimestamp(),
-    "status": status,
+  "userId": userId,
+  "products": products,
+  "totalPrice": totalPrice,
+  "totalItems": cartItems.length,
+  "paymentMethod": paymentMethod,
+  "address": address,
+  "createdAt": FieldValue.serverTimestamp(),
 
-    // 🔥 NEW LOCATION DATA
-    "latitude": lat,
-    "longitude": lng,
+  // ORDER STATUS
+  "status": status,
 
-  });
+  // ACCEPT SYSTEM
+  "accepted": false,
+  "acceptedBy": null,
+
+  // LOCATION
+  "latitude": lat,
+  "longitude": lng,
+});
 
   return doc.id;
 }

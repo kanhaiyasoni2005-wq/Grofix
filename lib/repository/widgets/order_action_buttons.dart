@@ -82,7 +82,7 @@ class _OrderActionButtonsState extends State<OrderActionButtons> {
 
                   Navigator.pop(context);
                 },
-                child: const Text("Cancel Order"),
+                child: const Text("Cancel Order", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               ),
             ),
 

@@ -111,7 +111,7 @@ class topProducts extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                               child: CachedNetworkImage(
                                 imageUrl: p.image ?? "",
-                                fit: BoxFit.cover,
+                                fit: BoxFit.contain,
 
                                 placeholder: (context, url) => Center(
                                   child: CircularProgressIndicator(),

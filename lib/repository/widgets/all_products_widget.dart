@@ -67,7 +67,7 @@ class AllProductsGrid extends StatelessWidget {
           ),
           child: CachedNetworkImage(
             imageUrl: p.image,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             width: double.infinity,
             placeholder: (context, url) => SizedBox(),
             errorWidget: (context, url, error) =>

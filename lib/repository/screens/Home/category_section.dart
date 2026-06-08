@@ -85,7 +85,7 @@ class CategorySection extends StatelessWidget {
                     borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                     child: CachedNetworkImage(
                       imageUrl: p.image,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       placeholder: (context, url) => SizedBox(),
                       errorWidget: (context, url, error) =>
                           Icon(Icons.broken_image),

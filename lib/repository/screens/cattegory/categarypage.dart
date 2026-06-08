@@ -115,7 +115,7 @@ void initState() {
                 imageUrl: product.image,
               height: 110,
               width: double.infinity,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               
                 placeholder: (context, url) => SizedBox(),
                   

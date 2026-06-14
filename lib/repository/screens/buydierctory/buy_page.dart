@@ -131,21 +131,21 @@ Container(
   width: double.infinity,
   padding: const EdgeInsets.all(12),
   decoration: BoxDecoration(
-    color: Colors.orange.shade50,
-    borderRadius: BorderRadius.circular(12),
-    border: Border.all(
-      color: Colors.orange.shade200,
-    ),
+  borderRadius: BorderRadius.circular(12),
+  border: Border.all(
+    color: Colors.grey.shade300,
+    width: 1,
   ),
+),
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Row(
         children: [
           Icon(
-            Icons.assignment_return,
-            color: Colors.orange,
-          ),
+  Icons.assignment_return,
+  color: Colors.green,
+),
           SizedBox(width: 8),
           Text(
             "Return & Cancellation Policy",
@@ -160,11 +160,11 @@ Container(
       SizedBox(height: 10),
 
       Text(
-        "• Product delivery के 4 घंटे के अंदर return किया जा सकता है.\n\n"
-        "• Return पर कुल राशि का 10% charge काटा जाएगा.\n\n"
-        "• Product उसी condition में होना चाहिए जिस condition में deliver किया गया था.\n\n"
-        "• Product में किसी भी प्रकार का damage, use, missing item या difference नहीं होना चाहिए.\n\n"
-        "• Order dispatch होने से पहले कभी भी cancel किया जा सकता है.",
+        "• Products can be returned within 4 hours of delivery.\n\n"
+"• A 10% charge will be deducted from the total amount for returns.\n\n"
+"• The product must be in the same condition as it was at the time of delivery.\n\n"
+"• The product must not have any damage, signs of use, missing items, or any differences from its original condition.\n\n"
+"• Orders can be canceled at any time before dispatch.",
         style: TextStyle(
           fontSize: 14,
           height: 1.5,

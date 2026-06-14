@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class PrivacyPolicyPage extends StatefulWidget {
-  const PrivacyPolicyPage({super.key});
+class Abaut_Us extends StatefulWidget {
+  const Abaut_Us({super.key});
 
   @override
-  State<PrivacyPolicyPage> createState() => _PrivacyPolicyPageState();
+  State<Abaut_Us> createState() => _Abaut_UsState();
 }
 
-class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
+class _Abaut_UsState extends State<Abaut_Us> {
   late final WebViewController controller;
 
   @override
@@ -18,7 +18,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(
-        Uri.parse("https://sites.google.com/view/grofix/privacy-policy"),
+        Uri.parse("https://sites.google.com/view/grofix/home"),
       );
   }
 
@@ -27,7 +27,7 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: Text("Privacy Policy", style: TextStyle(fontWeight: FontWeight.bold),),
+        title: Text("About Us", style: TextStyle(fontWeight: FontWeight.bold),),
       ),
       body: WebViewWidget(controller: controller),
     );

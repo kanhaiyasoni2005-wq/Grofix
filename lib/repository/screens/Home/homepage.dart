@@ -10,6 +10,7 @@ import 'package:grofix/repository/screens/Home/category_section.dart';
 import 'package:grofix/repository/widgets/all_products_widget.dart';
 import 'package:grofix/repository/widgets/popup.dart';
 import 'package:grofix/repository/widgets/topProducts.dart';
+import 'package:grofix/repository/widgets/update_api.dart';
 
 import 'package:provider/provider.dart';
 
@@ -30,6 +31,7 @@ class _HomepageState extends State<Homepage> {
       Provider.of<Viewmodel>(context, listen: false).fetchproduct();
       context.read<Cartprovider>().fetchCart();
        Provider.of<Viewmodel>(context, listen: false).fetchBanners(); 
+       checkForUpdate();
     });}
   @override
   Widget build(BuildContext context) {  
@@ -76,7 +78,7 @@ class _HomepageState extends State<Homepage> {
         borderRadius: BorderRadius.circular(10),
         image: DecorationImage(
           image: imageProvider,
-          fit: BoxFit.cover,
+          fit: BoxFit.fitWidth ,
         ),
       ),
         ),
@@ -105,7 +107,8 @@ class _HomepageState extends State<Homepage> {
     CategorySection(category: "fruits", vm: vm),
     CategorySection(category: "dairy", vm: vm),
     CategorySection(category: "beverages", vm: vm),
- topProducts( products: vm.products, category: "Sell",),
+    // CategorySection(category: "sell", vm: vm),
+ topProducts( products: vm.products, category: "sell",),
 
     CategorySection(category: "snacks", vm: vm),
     CategorySection(category: "clothes", vm: vm),

@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:grofix/orders/orders.dart';
 import 'package:grofix/repository/screens/login/loginscreen.dart';
 import 'package:grofix/repository/screens/privacypolycy/webpageprivacy.dart';
+import 'package:grofix/repository/widgets/aboutUs.dart';
 import 'package:grofix/repository/widgets/userdata.dart';
 
 class accountPage extends StatelessWidget {
@@ -128,9 +129,9 @@ class accountPage extends StatelessWidget {
 
 
                 _buildCard(
-                  icon: Icons.privacy_tip_outlined,
-                  title: "Privacy Policy",
-                  subtitle: "View our privacy policy",
+                  icon: Icons.info_outline,
+                  title: "About Us",
+                  subtitle: "Learn more about our company",
                   color: Colors.blue,
                   onTap: () async {
                   
@@ -138,7 +139,7 @@ class accountPage extends StatelessWidget {
                    Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PrivacyPolicyPage(),
+        builder: (context) => Abaut_Us(),
       ),
     );
                   },

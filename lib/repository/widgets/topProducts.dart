@@ -18,44 +18,44 @@ class topProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ SAFE FILTER
-    var filteredProducts = products.where((p) {
-      try {
-        return p.category?.toLowerCase() == category.toLowerCase();
-      } catch (e) {
-        return false;
-      }
-    }).toList();
 
-    // ✅ Special case (Sell ke liye)
-    if (category == "Sell") {
-      filteredProducts = products.take(5).toList();
-    }
+   List filteredProducts;
+
+if (category.trim().toLowerCase() == "sell") {
+  filteredProducts = products.where((p) {
+    return ((p.catagory ?? "")
+            .trim()
+            .toLowerCase()) ==
+        "sell";
+  }).toList();
+} else {
+  filteredProducts = products.where((p) {
+    return ((p.catagory ?? "")
+            .trim()
+            .toLowerCase()) ==
+        category.trim().toLowerCase();
+  }).toList();
+}
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
         Padding(
           padding: const EdgeInsets.all(10),
           child: Text(
             category,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
 
-        // ✅ Empty state
         if (filteredProducts.isEmpty)
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              "No products available",
-              style: TextStyle(
-                color: Color.fromARGB(255, 22, 22, 22),
-              ),
-            ),
+          const Padding(
+            padding: EdgeInsets.all(10),
+            child: Text("No products available"),
           )
         else
           SizedBox(
@@ -63,6 +63,7 @@ class topProducts extends StatelessWidget {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: filteredProducts.length,
+
               itemBuilder: (context, index) {
                 var p = filteredProducts[index];
 
@@ -71,22 +72,27 @@ class topProducts extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) {
-                          return productOverView(product: p);
-                        },
+                        builder: (_) =>
+                            productOverView(product: p),
                       ),
                     );
                   },
+
                   child: Container(
                     width: 160,
-                    margin: EdgeInsets.only(left: 10, bottom: 5),
-                    padding: EdgeInsets.all(8),
+                    margin: const EdgeInsets.only(
+                      left: 10,
+                      bottom: 5,
+                    ),
 
-                    // ✅ CARD DESIGN
+                    padding: const EdgeInsets.all(8),
+
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
+                      borderRadius:
+                          BorderRadius.circular(14),
+
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.black12,
                           blurRadius: 5,
@@ -96,115 +102,192 @@ class topProducts extends StatelessWidget {
                     ),
 
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
+
                       children: [
 
-                        // ✅ IMAGE WITH BACKGROUND
                         Expanded(
                           child: Container(
                             width: double.infinity,
+
                             decoration: BoxDecoration(
                               color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: CachedNetworkImage(
-                                imageUrl: p.image ?? "",
-                                fit: BoxFit.contain,
 
-                                placeholder: (context, url) => Center(
-                                  child: CircularProgressIndicator(),
+                              borderRadius:
+                                  BorderRadius.circular(12),
+                            ),
+
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.circular(12),
+
+                              child:
+                                  CachedNetworkImage(
+                                imageUrl:
+                                    p.image ?? "",
+
+                                fit:
+                                    BoxFit.contain,
+
+                                placeholder:
+                                    (_, __) =>
+                                        const Center(
+                                  child:
+                                      CircularProgressIndicator(),
                                 ),
 
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.image_not_supported),
+                                errorWidget:
+                                    (_, __, ___) =>
+                                        const Icon(
+                                  Icons
+                                      .image_not_supported,
+                                ),
                               ),
                             ),
                           ),
                         ),
 
-                        SizedBox(height: 8),
+                        const SizedBox(
+                          height: 8,
+                        ),
 
-                        // ✅ STOCK
-                        if (p.stock <= 0)
-                          Text(
+                        if ((p.stock ?? 0) <= 0)
+                          const Text(
                             "Out of Stock",
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: 12,
-                              fontWeight: FontWeight.w500,
                             ),
                           ),
 
-                        SizedBox(height: 4),
+                        const SizedBox(
+                          height: 4,
+                        ),
 
-                        // ✅ PRODUCT NAME
                         Text(
                           p.name ?? "",
+
                           maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
+
+                          overflow:
+                              TextOverflow.ellipsis,
+
+                          style:
+                              const TextStyle(
+                            fontWeight:
+                                FontWeight.w600,
                             fontSize: 14,
                           ),
                         ),
 
-                        SizedBox(height: 6),
+                        const SizedBox(
+                          height: 6,
+                        ),
 
                         Row(
                           mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              MainAxisAlignment
+                                  .spaceBetween,
+
                           children: [
 
-                            // ✅ PRICE
                             Text(
                               "₹${p.price}",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
+
+                              style:
+                                  const TextStyle(
+                                color:
+                                    Colors.green,
+
+                                fontWeight:
+                                    FontWeight.bold,
                               ),
                             ),
 
-                            // ✅ ADD BUTTON
                             Container(
                               height: 32,
                               width: 32,
-                              decoration: BoxDecoration(
-                                color: p.stock > 0
-                                    ? Colors.green
-                                    : Colors.grey.shade300,
+
+                              decoration:
+                                  BoxDecoration(
+                                color:
+                                    (p.stock ?? 0) >
+                                            0
+                                        ? Colors
+                                            .green
+                                        : Colors
+                                            .grey,
+
                                 borderRadius:
-                                    BorderRadius.circular(8),
+                                    BorderRadius
+                                        .circular(
+                                            8),
                               ),
-                              child: IconButton(
-                                padding: EdgeInsets.zero,
-                                onPressed: p.stock > 0
-                                    ? () {
-                                        var cartItem = CartModel(
-                                          catagory: p.catagory!,
-                                          Description: p.Description!,
-                                          productId: p.id,
-                                          name: p.name,
-                                          image: p.image,
-                                          price: p.price,
-                                          quantity: 1,
-                                        );
 
-                                        var cart =
-                                            context.read<Cartprovider>();
+                              child:
+                                  IconButton(
+                                padding:
+                                    EdgeInsets
+                                        .zero,
 
-                                        cart.addItem(cartItem);
-                                        cart.showCartPopupTemporarily();
-                                      }
-                                    : null,
-                                icon: Icon(
+                                onPressed:
+                                    (p.stock ??
+                                                0) >
+                                            0
+                                        ? () {
+
+                                            var cartItem =
+                                                CartModel(
+                                              catagory:
+                                                  p.catagory ??
+                                                      "",
+
+                                              Description:
+                                                  p.Description ??
+                                                      "",
+
+                                              productId:
+                                                  p.id,
+
+                                              name:
+                                                  p.name,
+
+                                              image:
+                                                  p.image,
+
+                                              price:
+                                                  p.price,
+
+                                              quantity:
+                                                  1,
+                                            );
+
+                                            context
+                                                .read<
+                                                    Cartprovider>()
+                                                .addItem(
+                                                    cartItem);
+
+                                            context
+                                                .read<
+                                                    Cartprovider>()
+                                                .showCartPopupTemporarily();
+                                          }
+                                        : null,
+
+                                icon:
+                                    Icon(
                                   Icons.add,
-                                  color: p.stock > 0
-                                      ? Colors.white
-                                      : Colors.grey,
-                                  size: 18,
+
+                                  color:
+                                      (p.stock ??
+                                                  0) >
+                                              0
+                                          ? Colors
+                                              .white
+                                          : Colors
+                                              .grey,
                                 ),
                               ),
                             ),

@@ -232,8 +232,8 @@ Widget build(BuildContext context) {
           
           }else{
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Minimum order amount ₹50 hona chahiye"),
-              backgroundColor: Colors.red,
+              SnackBar(content: Text("The minimum order amount should be50 rupees" ,style: TextStyle(color: Colors.grey.shade300),),
+              backgroundColor: Colors.black87,
               )
             );
           }

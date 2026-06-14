@@ -91,6 +91,8 @@ class _BottomnavigationState extends State<Bottomnavigation> {
    
     ),
     body: Page[indexvalue],
+
+    
    
     );
   }

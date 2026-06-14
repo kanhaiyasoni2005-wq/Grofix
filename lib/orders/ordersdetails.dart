@@ -57,7 +57,10 @@ if (order["deliveredTime"] is Timestamp) {
         title: Text("Order Details")
       ),
 
-      body: SingleChildScrollView(
+      body:
+     
+     
+       SingleChildScrollView(
   child: Column(
     children: [
 
@@ -173,39 +176,67 @@ if (order["deliveredTime"] is Timestamp) {
             SizedBox(height: 20),
 
             // 🔥 TRACKING
-            OrderTrackingWidget(status: status),
-          ],
+           StreamBuilder<DocumentSnapshot>(
+  stream: FirebaseFirestore.instance
+      .collection("orders")
+      .doc(order["id"])
+      .snapshots(),
+  builder: (context, snapshot) {
+
+    if (!snapshot.hasData) {
+      return const CircularProgressIndicator();
+    }
+
+    final liveOrder =
+        snapshot.data!.data() as Map<String, dynamic>;
+
+    final liveStatus =
+        (liveOrder["status"] ?? "order placed")
+            .toString()
+            .toLowerCase();
+
+    return Column(
+      children: [
+
+        OrderTrackingWidget(
+          status: liveStatus,
         ),
-      ),
 
-      // 🔥 STATUS
-      Text(
-        "Status: $status",
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: status == "cancelled"
-              ? Colors.red
-              : Colors.green,
+        const SizedBox(height: 10),
+
+        Text(
+          "Status: $liveStatus",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: liveStatus == "cancelled"
+                ? Colors.red
+                : Colors.green,
+          ),
         ),
-      ),
 
-      SizedBox(height: 10),
+        const SizedBox(height: 10),
 
-      // 🔥 ACTION BUTTONS
-      OrderActionButtons(
- 
-  status: status,
-  orderId: order["id"],
-  deliveredTime: deliveredTime, // 👈 ADD THIS
+        OrderActionButtons(
+          status: liveStatus,
+          orderId: order["id"],
+          deliveredTime: deliveredTime,
+        ),
+      ],
+    );
+  },
 ),
 
       SizedBox(height: 20),
     ],
   ),
 ),
-    );
+  ]
+  ),
+  ),
+  );
   }
 }
+
 
 

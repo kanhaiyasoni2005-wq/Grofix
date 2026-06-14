@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:grofix/repository/screens/bottomNav/bottomnavigation.dart';
 import 'package:grofix/repository/screens/login/auth_service.dart';
+import 'package:grofix/repository/screens/privacypolycy/webpageprivacy.dart';
 
 class Loginscreen extends StatelessWidget {
   const Loginscreen({super.key});
@@ -149,6 +150,29 @@ class Loginscreen extends StatelessWidget {
                         color: Colors.grey,
                       ),
                     ),
+                    SizedBox(height: 10),
+
+TextButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PrivacyPolicyPage(),
+      ),
+    );// Privacy Policy Screen ya URL open karo
+  },
+
+  child: Text(
+    "Privacy Policy",
+
+    style: TextStyle(
+      color: Colors.blue,
+      fontSize: 13,
+      decoration:
+          TextDecoration.underline,
+    ),
+  ),
+),
                   ],
                 ),
               ),

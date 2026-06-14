@@ -22,9 +22,14 @@ class CategorySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    var filteredProducts = vm.products
-        .where((p) => p.catagory == category)
-        .toList();
+    var filteredProducts = vm.products.where((p) {
+  return (p.catagory )
+          .trim()
+          .toLowerCase() ==
+      category
+          .trim()
+          .toLowerCase();
+}).toList();
 
     if (filteredProducts.isEmpty) return SizedBox();
 

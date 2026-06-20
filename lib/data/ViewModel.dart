@@ -147,17 +147,31 @@ void selectAddress(Map<String, dynamic> address) {
   });
 
   // 🔥 2. ORDER SAVE
-  List<Map<String, dynamic>> products = cartItems.map((item) {
-    return {
-      "productId": item.productId,
-      "name": item.name,
-      "price": item.price,
-      "quantity": item.quantity,
-      "total": item.price * item.quantity,
-      "image": item.image,
-      "userId": userId,
-    };
-  }).toList();
+  // 🔥 2. ORDER SAVE
+List<Map<String, dynamic>> products = [];
+
+for (var item in cartItems) {
+
+  final doc = await firestore
+      .collection("User")
+      .doc(item.productId)
+      .get();
+
+  final data = doc.data();
+
+  double price =
+      (data?["price"] ?? 0).toDouble();
+
+  products.add({
+    "productId": item.productId,
+    "name": item.name,
+    "price": price,
+    "quantity": item.quantity,
+    "total": price * item.quantity,
+    "image": item.image,
+    "userId": userId,
+  });
+}
 
 var doc = await firestore.collection("orders").add({
 

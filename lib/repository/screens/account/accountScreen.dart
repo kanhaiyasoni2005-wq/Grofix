@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:grofix/orders/orders.dart';
 import 'package:grofix/repository/screens/login/loginscreen.dart';
-import 'package:grofix/repository/screens/privacypolycy/webpageprivacy.dart';
 import 'package:grofix/repository/widgets/aboutUs.dart';
 import 'package:grofix/repository/widgets/userdata.dart';
 

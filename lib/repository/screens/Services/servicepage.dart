@@ -88,10 +88,10 @@ bool isPickingPDF = false;
   void loadServices() {
     switch (widget.categoryName) {
       case "CSC Service":
-        services = [ "Samagra ID", "Mool Niwasi", "Online Form","Printing", "Other CSC Services"];
+        services = [ "Samagra ID", "Domicile Certificate", "Online Form","Printing", "Other CSC Services"];
         break;
-      case "Electrician":
-        services = ["Fan Repair", "Wiring", "Switch Repair","other electrician services"];
+      case "Electric Service":
+        services = ["Fan Repair", "Windig", "Switch Repair","other electrician services"];
         break;
       case "Plumber":
         services = ["Leak Fix", "Pipe Install", "Tap Repair","other plumber services"];

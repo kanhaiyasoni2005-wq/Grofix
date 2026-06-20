@@ -142,7 +142,7 @@ class CategorySection extends StatelessWidget {
           productId: p.id,
           name: p.name,
           image: p.image,
-          price: p.price,
+          
           quantity: 1,
         );
 

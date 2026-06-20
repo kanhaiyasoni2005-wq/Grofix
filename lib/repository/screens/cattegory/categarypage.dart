@@ -169,7 +169,7 @@ void initState() {
           productId: product.id,
           name: product.name,
           image: product.image,
-          price: product.price,
+          
           quantity: 1,
         );
 

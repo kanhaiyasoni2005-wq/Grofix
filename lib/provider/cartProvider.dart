@@ -26,11 +26,20 @@ class Cartprovider extends ChangeNotifier {
 
   // ================= FETCH CART =================
   void fetchCart() {
-    _repo.getCartItems().listen((data) {
+
+  _repo.getCartItems().listen(
+    (data) async {
+
       cartList = data;
+
+      await calculateTotal();
+
       notifyListeners();
-    });
-  }
+
+    },
+  );
+
+}
 
   // ================= REMOVE ITEM =================
   void removeItem(String productId) async {
@@ -86,13 +95,57 @@ class Cartprovider extends ChangeNotifier {
   }
 
   // ================= TOTAL PRICE =================
-  double get totalPrice {
-    double total = 0;
-    for (var item in cartList) {
-      total += item.price * item.quantity;
-    }
-    return total;
-  }
+  double _totalPrice = 0;
+
+double get totalPrice =>
+    _totalPrice;
+
+Future<void> calculateTotal() async {
+
+ double total = 0;
+
+ for (var item in cartList) {
+
+   final doc =
+   await FirebaseFirestore
+       .instance
+       .collection(
+         "User",
+       )
+       .doc(
+         item.productId,
+       )
+       .get();
+
+   if (
+   doc.exists
+   ) {
+
+     double price =
+     (
+       doc[
+         "price"
+       ] ??
+       0
+     )
+     .toDouble();
+
+     total +=
+     (
+       price *
+       item.quantity
+     );
+
+   }
+
+ }
+
+ _totalPrice =
+ total;
+
+ notifyListeners();
+
+}
 
   // ================= TOTAL ITEMS =================
   int get totalItems {

@@ -5,6 +5,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grofix/data/ViewModel.dart';
+import 'package:grofix/permision/notification/saveUsertoken.dart';
+import 'package:grofix/permision/permission_service.dart';
 import 'package:grofix/provider/cartProvider.dart';
 import 'package:grofix/repository/screens/Home/category_section.dart';
 import 'package:grofix/repository/widgets/all_products_widget.dart';
@@ -23,16 +25,30 @@ class Homepage extends StatefulWidget{
   State<Homepage> createState() => _HomepageState();
 }
 
+
+
 class _HomepageState extends State<Homepage> {
    @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      Provider.of<Viewmodel>(context, listen: false).fetchproduct();
-      context.read<Cartprovider>().fetchCart();
-       Provider.of<Viewmodel>(context, listen: false).fetchBanners(); 
-       checkForUpdate();
-    });}
+  @override
+void initState() {
+  super.initState();
+
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+
+    context.read<Viewmodel>().fetchproduct();
+
+    context.read<Cartprovider>().fetchCart();
+
+    context.read<Viewmodel>().fetchBanners();
+    saveUserToken();
+
+    checkForUpdate();
+
+
+    await PermissionService.askPermissions();
+
+  });
+}
   @override
   Widget build(BuildContext context) {  
     User? user = FirebaseAuth.instance.currentUser;
@@ -52,46 +68,74 @@ class _HomepageState extends State<Homepage> {
     /// 🔥 TOP BANNER (अब scroll करेगा)
     Consumer<Viewmodel>(
   builder: (context, vm, child) {
+
     if (vm.bannerImages.isEmpty) {
-  return SizedBox();
-}
+      return const SizedBox();
+    }
+
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: SizedBox(
         height: 200,
         width: double.infinity,
+
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
+
           child: CarouselSlider(
             options: CarouselOptions(
               height: 200,
               autoPlay: true,
               viewportFraction: 1,
+              enlargeCenterPage: false,
             ),
+
             items: vm.bannerImages.map((imageUrl) {
+
               return CachedNetworkImage(
-        imageUrl: imageUrl,
-        imageBuilder: (context, imageProvider) => Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(
-          image: imageProvider,
-          fit: BoxFit.fitWidth ,
-        ),
-      ),
-        ),
-        // placeholder: (context, url) =>
-        // Center(child: CircularProgressIndicator(strokeWidth: 2)),
-        errorWidget: (context, url, error) =>
-        Icon(Icons.broken_image),
-      );
-              // return Image.network(
-              //   imageUrl,
-              //   fit: BoxFit.cover,
-              //   width: double.infinity,
-              // );
+
+                imageUrl: imageUrl,
+
+                imageBuilder:
+                    (context, imageProvider) => Container(
+
+                  width: double.infinity,
+                  height: double.infinity,
+
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(10),
+
+                    image: DecorationImage(
+                      image: imageProvider,
+
+                      // 🔥 FULL IMAGE SHOW
+                      fit: BoxFit.cover,
+
+                      // CENTER ALIGN
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                ),
+
+                placeholder: (context, url) =>
+                    const Center(
+                  child:
+                      CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                ),
+
+                errorWidget:
+                    (context, url, error) =>
+                        const Center(
+                  child: Icon(
+                    Icons.broken_image,
+                    size: 40,
+                  ),
+                ),
+              );
+
             }).toList(),
           ),
         ),

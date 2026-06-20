@@ -1,5 +1,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grofix/provider/cartProvider.dart';
 import 'package:grofix/repository/screens/bottomNav/bottomnavigation.dart';
@@ -100,38 +101,66 @@ Widget build(BuildContext context) {
 
             // ================= DETAILS =================
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+  child: StreamBuilder<DocumentSnapshot>(
 
-                  Text(
-                    item.name,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+    stream: FirebaseFirestore.instance
+        .collection("User")
+        .doc(item.productId)
+        .snapshots(),
 
-                  SizedBox(height: 5),
+    builder: (context, snapshot) {
 
-                  Text(
-                    "₹${item.price}",
-                    style: TextStyle(color: Colors.grey),
-                  ),
+      if (!snapshot.hasData) {
+        return SizedBox();
+      }
 
-                  SizedBox(height: 5),
+      final product =
+          snapshot.data!.data()
+          as Map<String, dynamic>;
 
-                  Text(
-                    "Total: ₹${item.price * item.quantity}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
+      double price =
+          (product["price"] ?? 0)
+          .toDouble();
+
+      return Column(
+
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
+
+        children: [
+
+          Text(
+            item.name,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight:
+                  FontWeight.bold,
             ),
+          ),
+
+          SizedBox(height: 5),
+
+          Text(
+            "₹$price",
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+
+          SizedBox(height: 5),
+
+          Text(
+            "Total: ₹${price * item.quantity}",
+            style: TextStyle(
+              fontWeight:
+                  FontWeight.w600,
+            ),
+          ),
+        ],
+      );
+    },
+  ),
+),
 
             // ================= ACTIONS =================
             Column(
@@ -224,7 +253,7 @@ Widget build(BuildContext context) {
           ),
         ),
         onPressed: () {
-          if(cartProvider.totalPrice >= 50){
+          if(cartProvider.totalPrice >= 100){
              Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => productReview()),
@@ -232,7 +261,7 @@ Widget build(BuildContext context) {
           
           }else{
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("The minimum order amount should be50 rupees" ,style: TextStyle(color: Colors.grey.shade300),),
+              SnackBar(content: Text("The minimum order amount should be 100 rupees" ,style: TextStyle(color: Colors.grey.shade300),),
               backgroundColor: Colors.black87,
               )
             );

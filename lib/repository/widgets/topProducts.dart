@@ -256,8 +256,7 @@ if (category.trim().toLowerCase() == "sell") {
                                               image:
                                                   p.image,
 
-                                              price:
-                                                  p.price,
+                                              
 
                                               quantity:
                                                   1,

@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grofix/data/ViewModel.dart';
@@ -129,39 +130,66 @@ body:Stack(
     
               // ================= DETAILS =================
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.name,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-    
-                    SizedBox(height: 5),
-    
-                    Text(
-                      "₹${item.price}",
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
-                      ),
-                    ),
-    
-                    SizedBox(height: 5),
-    
-                    Text(
-                      "Total: ₹${item.quantity * item.price}",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+  child: StreamBuilder<DocumentSnapshot>(
+
+    stream: FirebaseFirestore.instance
+        .collection("User")
+        .doc(item.productId)
+        .snapshots(),
+
+    builder: (context, snapshot) {
+
+      if (!snapshot.hasData) {
+        return SizedBox();
+      }
+
+      final product =
+          snapshot.data!.data()
+          as Map<String, dynamic>;
+
+      double price =
+          (product["price"] ?? 0)
+          .toDouble();
+
+      return Column(
+
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
+
+        children: [
+
+          Text(
+            item.name,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
+
+          SizedBox(height: 5),
+
+          Text(
+            "₹$price",
+            style: TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+
+          SizedBox(height: 5),
+
+          Text(
+            "Total: ₹${price * item.quantity}",
+            style: TextStyle(
+              fontWeight:
+                  FontWeight.w600,
+            ),
+          ),
+        ],
+      );
+    },
+  ),
+),
               
             ],
           ),

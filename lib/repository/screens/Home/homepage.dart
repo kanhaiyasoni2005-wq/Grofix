@@ -110,7 +110,7 @@ void initState() {
                       image: imageProvider,
 
                       // 🔥 FULL IMAGE SHOW
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fitWidth,
 
                       // CENTER ALIGN
                       alignment: Alignment.center,

@@ -253,7 +253,7 @@ Widget build(BuildContext context) {
           ),
         ),
         onPressed: () {
-          if(cartProvider.totalPrice >= 100){
+          if(cartProvider.totalPrice >= 00){
              Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => productReview()),

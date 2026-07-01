@@ -63,6 +63,21 @@ Future<Position> getLocation() async {
   Widget build(BuildContext context) {
    var vm = Provider.of<Viewmodel>(context, );
    var cart = context.watch<Cartprovider>();
+   double subtotal = cart.totalPrice;
+
+double deliveryCharge = 0;
+
+if (subtotal < 50) {
+  deliveryCharge = 20;
+}
+else if (subtotal < 100) {
+  deliveryCharge = 10;
+}
+else {
+  deliveryCharge = 0;
+}
+
+double finalTotal = subtotal + deliveryCharge;
     
     // TODO: implement build
     return Scaffold(
@@ -335,10 +350,104 @@ body:Stack(
               });
             },
           ),
+          Divider(),
+
+Padding(
+  padding: const EdgeInsets.only(
+    top: 10,
+    left: 10,
+    right: 10,
+  ),
+
+  child: Column(
+    children: [
+
+      Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween,
+
+        children: [
+
+          Text(
+            "Items Total",
+            style: TextStyle(
+              fontSize: 15,
+            ),
+          ),
+
+          Text(
+            "₹${subtotal.toStringAsFixed(2)}",
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+
+      SizedBox(height: 10),
+
+      Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween,
+
+        children: [
+
+          Text(
+            "Delivery Charge",
+            style: TextStyle(
+              fontSize: 15,
+            ),
+          ),
+
+          Text(
+            "₹${deliveryCharge.toStringAsFixed(2)}",
+            style: TextStyle(
+              color: Colors.orange,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+
+      Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 10,
+        ),
+        child: Divider(),
+      ),
+
+      Row(
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween,
+
+        children: [
+
+          Text(
+            "Final Total",
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight:
+                  FontWeight.bold,
+            ),
+          ),
+
+          Text(
+            "₹${finalTotal.toStringAsFixed(2)}",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight:
+                  FontWeight.bold,
+              color: Colors.green,
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+),
         ],
       ),
     ),
-    
             // ================= TOTAL + BUTTON =================
           Container(
       margin: EdgeInsets.all(10),
@@ -362,12 +471,12 @@ body:Stack(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Total Amount",
+                "Final Amount",
                 style: TextStyle(color: Colors.grey),
               ),
               SizedBox(height: 5),
               Text(
-                "₹${context.watch<Cartprovider>().totalPrice.toStringAsFixed(2)}",
+                "₹${finalTotal.toStringAsFixed(2)}",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -436,7 +545,7 @@ double lng = pos.longitude;
           String orderId = await vm.placeOrder(
             cartItems: cartItemsCopy,
             address: vm.selectedAddress!,
-            totalPrice: cart.totalPrice,
+            totalPrice: finalTotal,
             paymentMethod: "cod",
             status: "Order Placed",
             lat: lat,
@@ -462,7 +571,7 @@ double lng = pos.longitude;
 
   // 🔥 FIRST CREATE CASHFREE ORDER
   var data = await PaymentService.createOrder(
-  amount: cart.totalPrice,
+  amount: finalTotal,
   name: vm.selectedAddress?["name"]?.toString() ?? "",
   email: user?.email ?? "",
   phone: vm.selectedAddress?["phone"]?.toString() ?? "",
@@ -491,7 +600,7 @@ double lng = pos.longitude;
       String firestoreOrderId = await vm.placeOrder(
         cartItems: cartItemsCopy,
         address: vm.selectedAddress!,
-        totalPrice: cart.totalPrice,
+        totalPrice: finalTotal,
         paymentMethod: "online",
         status: "Order Placed",
         lat: lat,

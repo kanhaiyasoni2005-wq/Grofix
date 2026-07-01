@@ -43,13 +43,28 @@ if (order["deliveredTime"] is Timestamp) {
     }
 
     // ✅ CALCULATIONS
-    int totalItems = 0;
-    double grandTotal = 0;
+int totalItems = 0;
+double itemTotal = 0;
 
-    for (var item in products) {
-      totalItems += (item["quantity"] ?? 0) as int;
-      grandTotal += (item["total"] ?? 0).toDouble();
-    }
+for (var item in products) {
+  totalItems += (item["quantity"] ?? 0) as int;
+
+  itemTotal +=
+      (item["total"] ?? 0).toDouble();
+}
+
+// Delivery charge
+double deliveryCharge = 0;
+
+if (itemTotal < 50) {
+  deliveryCharge = 20;
+}
+else if (itemTotal < 100) {
+  deliveryCharge = 10;
+}
+
+double finalTotal =
+    itemTotal + deliveryCharge;
 
     return Scaffold(
       appBar: AppBar(
@@ -157,21 +172,71 @@ if (order["deliveredTime"] is Timestamp) {
 
             SizedBox(height: 10),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Total Items"),
-                Text("$totalItems"),
-              ],
-            ),
+            Column(
+  children: [
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Grand Total"),
-                Text("₹$grandTotal"),
-              ],
-            ),
+    Row(
+      mainAxisAlignment:
+          MainAxisAlignment.spaceBetween,
+      children: [
+        Text("Total Items"),
+        Text("$totalItems"),
+      ],
+    ),
+
+    SizedBox(height: 8),
+
+    Row(
+      mainAxisAlignment:
+          MainAxisAlignment.spaceBetween,
+      children: [
+        Text("Items Total"),
+        Text("₹${itemTotal.toStringAsFixed(2)}"),
+      ],
+    ),
+
+    SizedBox(height: 8),
+
+    Row(
+      mainAxisAlignment:
+          MainAxisAlignment.spaceBetween,
+      children: [
+        Text("Delivery Charge"),
+        Text(
+          "₹${deliveryCharge.toStringAsFixed(2)}",
+          style: TextStyle(
+            color: Colors.orange,
+          ),
+        ),
+      ],
+    ),
+
+    Divider(height: 25),
+
+    Row(
+      mainAxisAlignment:
+          MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Final Total",
+          style: TextStyle(
+            fontWeight:
+                FontWeight.bold,
+          ),
+        ),
+
+        Text(
+          "₹${finalTotal.toStringAsFixed(2)}",
+          style: TextStyle(
+            fontWeight:
+                FontWeight.bold,
+            color: Colors.green,
+          ),
+        ),
+      ],
+    ),
+  ],
+),
 
             SizedBox(height: 20),
 

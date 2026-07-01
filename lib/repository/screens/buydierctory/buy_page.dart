@@ -31,28 +31,26 @@ body:
       
           /// 🔥 PRODUCT IMAGE
           Container(
-            height: 280,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(25),
-              ),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(25),
-              ),
-              child: CachedNetworkImage(
-                imageUrl: product.image,
-                fit: BoxFit.contain,
-                placeholder: (context, url) =>
-                    Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) =>
-                    Icon(Icons.broken_image),
-              ),
-            ),
-          ),
+  width: double.infinity,
+  constraints: BoxConstraints(
+    minHeight: 280,
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.vertical(
+      bottom: Radius.circular(25),
+    ),
+    child: CachedNetworkImage(
+      imageUrl: product.image,
+      width: double.infinity,
+      fit: BoxFit.fitWidth, // 🔥 crop kam hoga
+      alignment: Alignment.center,
+      placeholder: (context, url) =>
+          Center(child: CircularProgressIndicator()),
+      errorWidget: (context, url, error) =>
+          Icon(Icons.broken_image),
+    ),
+  ),
+),
       
           SizedBox(height: 15),
       
